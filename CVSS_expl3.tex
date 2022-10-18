@@ -485,11 +485,17 @@
 
 \begin{document}
 	
-
+    \section{Computation Tests}
 
     \cvssTest{}
 
-    \section{Demo}
+    \section{Without CVSS string parsing}
+    
+    Con : have to split all the CVSS string in 8 arguments.
+    
+    Less re-usable in other projects
+    
+    \subsection{cvssBaseScorePretty}
 
     \cvssBaseScorePretty{N}{L}{N}{N}{U}{L}{L}{L}
 
@@ -497,20 +503,38 @@
 
     \cvssBaseScorePretty{N}{H}{N}{R}{U}{L}{L}{L}
 
+
+    \subsection{cvssBaseScore}
+    
+    
     \cvssBaseScore{N}{L}{N}{N}{U}{L}{L}{L}
-
+    
     \cvssBaseScore{N}{L}{N}{N}{C}{L}{L}{L}
-
+    
     \cvssBaseScore{N}{H}{N}{R}{U}{L}{L}{L}
 
 
-    A: \cvssBaseScore{N}{L}{N}{N}{U}{L}{L}{L}
+    \section{With CVSS string parsing}
+    
+    \textbf{Goal}: 1 single argument, CVSS3 string
+    
+	\textbf{Available methods}
+    \begin{itemize}
+    	\item \texttt{computeCVSS}: only the CVSS score
+    	\item \texttt{category}: the category of that score
+    	\item \texttt{cvssTag}: color framed categroy of that score
+    \end{itemize}
 
-    B: \cvssBaseScore{N}{L}{N}{N}{C}{L}{L}{L}
 
-    C: \cvssBaseScore{N}{H}{N}{R}{U}{L}{L}{L}
 
-    \section{Additions}
+	\computeCVSS{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}
+	
+	\category{5.3}
+	
+	\cvssTag{\category{5.3}}
+
+
+	\textbf{Debug}
 
     \texttt{\textbackslash cvssBaseScoreRatingDEBUG} : \cvssBaseScoreRatingDEBUG{N}{H}{N}{R}{U}{L}{L}{L}
 
@@ -524,11 +548,6 @@
 
     ---
 
-    \computeCVSS{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}
-    
-    \category{5.3}
-    
-    \cvssTag{\category{5.3}}
 
 ---
 
