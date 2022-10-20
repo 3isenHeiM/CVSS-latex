@@ -1,8 +1,7 @@
 \documentclass{article}
-\usepackage[a4paper, total={6in, 8in}]{geometry}
-\usepackage{pgfmath}
+%\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{expl3}
 \usepackage[dvipsnames,svgnames,table]{xcolor}
-\usepackage{lipsum}
 \usepackage[skins]{tcolorbox}
 \tcbuselibrary{xparse}
 \usepackage{xstring}
@@ -295,8 +294,8 @@
 \str_new:N \l_cvssI_str
 \str_new:N \l_cvssA_str
 
-%\NewExpandableDocumentCommand \computeCVSS { m }{%
-\cs_new_protected:Npn \computeCVSS #1 {
+\NewExpandableDocumentCommand \computeCVSS { m }{%
+%\cs_new_protected:Npn \computeCVSS #1 {
     % A group allows nesting
     \group_begin:
     % Split into parts (separated by "/")
@@ -548,8 +547,9 @@
 
     ---
 
-
----
+%	\edef\x{\computeCVSS{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}}
+	
+%	\texttt{\meaning\x}
 
 %    \category{\computeCVSS{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}}
 %    \testCompute{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}
