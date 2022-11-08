@@ -1,0 +1,600 @@
+% \iffalse meta-comment
+%<*internal>
+\iffalse
+%</internal>
+%<*readme>
+----------------------------------------------------------------
+cvss --- A Package to compute and display CVSS base scores
+E-mail: pierre@vivegnis.be
+Released under the LaTeX Project Public License v1.3c or later
+See http://www.latex-project.org/lppl.txt
+----------------------------------------------------------------
+
+The LaTeX package allows a user to compute the CVSS base score for
+an input CVSS vector, as well as other artifacts (CVSS level etc)
+%</readme>
+%<*internal>
+\fi
+\def\nameofplainTeX{plain}
+\ifx\fmtname\nameofplainTeX\else
+  \expandafter\begingroup
+\fi
+%</internal>
+%<*install>
+\input docstrip.tex
+\keepsilent
+\askforoverwritefalse
+\preamble
+----------------------------------------------------------------
+cvss --- A package to compute and display CVSS base scores
+E-mail: pierre@vivegnis.be
+Released under the LaTeX Project Public License v1.3c or later
+See http://www.latex-project.org/lppl.txt
+----------------------------------------------------------------
+
+\endpreamble
+\postamble
+
+Copyright (C) 2022 by Pierre VIVEGNIS <pierre@vivegnis.be>
+
+This work may be distributed and/or modified under the
+conditions of the LaTeX Project Public License (LPPL), either
+version 1.3c of this license or (at your option) any later
+version.  The latest version of this license is in the file:
+
+http://www.latex-project.org/lppl.txt
+
+This work is "maintained" (as per LPPL maintenance status) by
+Pierre VIVEGNIS.
+
+This work consists of the file  cvss.dtx
+and the derived files           cvss.ins,
+                                cvss.pdf and
+                                cvss.sty.
+
+\endpostamble
+\usedir{tex/latex/cvss}
+\generate{
+  \file{\jobname.sty}{\from{\jobname.dtx}{package}}
+}
+%</install>
+%<install>\endbatchfile
+%<*internal>
+\usedir{source/latex/cvss}
+\generate{
+  \file{\jobname.ins}{\from{\jobname.dtx}{install}}
+}
+\nopreamble\nopostamble
+\usedir{doc/latex/cvss}
+\generate{
+  \file{README.txt}{\from{\jobname.dtx}{readme}}
+}
+\ifx\fmtname\nameofplainTeX
+  \expandafter\endbatchfile
+\else
+  \expandafter\endgroup
+\fi
+%</internal>
+%<*package>
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{cvss}[2022/11/03 First Release]
+%</package>
+%<*driver>
+\documentclass{l3doc}
+\usepackage{\jobname}
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+\setlength{\parindent}{0pt}
+\begin{document}
+  \DocInput{\jobname.dtx}
+  \PrintChanges
+  \PrintIndex
+\end{document}
+%</driver>
+% \fi
+%
+% \begin{documentation}
+%
+%\GetFileInfo{\jobname.sty}
+%
+%\title{
+%  The \textsf{cvss} package\thanks{
+%    This file describes version \fileversion, last revised \filedate.
+%  }
+%}
+%\author{
+%  Pierre VIVEGNIS\thanks{E-mail: pierre@vivegnis.be}
+%}
+%\date{Released \filedate}
+%
+%\maketitle
+% \tableofcontents
+%
+% \section{Introduction}
+%
+% The \textsf{cvss} package allows the user to compute CVSS3.1 base scores and use them in documents. The Common Vulnerability Scoring System (CVSS) is an open framework for communicating the characteristics and severity of software vulnerabilities. CVSS consists of three metric groups: Base, Temporal, and Environmental.
+%
+% This packages only deal with Base score. Temporal and Environental scores will be part of a future release.
+%
+% More information can be found at \texttt{https://www.first.org/cvss/specification-document}.
+%
+% \section{Acknowledgements}
+%
+% I want to thank Alexander Lill who first created a cvss project in \LaTeX (available at \texttt{https://github.com/AlexanderLill/cvss3tex}).
+%
+% \section{Usage}
+%
+% The goal of this package is to compute the CVSS base score for an input CVSS vector, and to give the user macro to output it in 3 different forms
+% \begin{itemize}
+%	\item The CVSS \textbf{score} (fron 0.0 to 10)
+%	\item the \textbf{level} (None, Info, Low, Medium, High or Critical)
+%	\item the \textbf{colored level}
+%	\item the \textbf{tag} which is a colored frame around the level
+% \end{itemize}
+%
+% All macros are expandable, which makes them usable in any context.
+%
+% The macros of this packages are divided in 2 categories: 
+% \begin{itemize}
+% 	\item \textbf{direct macros} : that will take as input the CVSS base score and give you the result
+%   \item \textbf{indirect macros} : that are intermediary, in the way that they only compute a form based on the precedent one.
+% \end{itemize}
+%
+% \subsection{Direct Macros}
+%
+% \DescribeMacro{\cvssScore}
+% This is the main macro of this package, responsible for computing the base CVSS 3.1 score of an \marg{input vector} (without \texttt{CVSS3.1/}). The output of this macro is a floating point CVSS score, for example \texttt{5.4}.
+%
+% \begin{verbatim}
+% \cvssScore{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}
+% \end{verbatim}
+%
+% This will output the following CVSS base score: 5.3
+%
+% \DescribeMacro{\cvssLevel}
+% This macro will output the CVSS level from an \marg{input vector} (without \texttt{CVSS3.1/}), for example \texttt{Info}.
+%
+% \begin{verbatim}
+% \cvssLevel{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}
+% \end{verbatim}
+%
+% This will output the following CVSS level: \textbf{Info}
+
+% \subsection{Indirect Macros}
+%
+% \changes{v1.0}{2022/11/03}{First public release}
+%
+
+%
+% \DescribeMacro{\category}
+% This macro will output the CVSS category (None, Info, Low, Medium, High or Critical) based on the input CVSS vector passed as argument \marg{numerical score}. The mandatory argument is a floating point CVSS score, for excanple \texttt{5.4}.
+% might have an optional argument \oarg{score} and mandatory one
+% \marg{arg2}.
+%
+% \begin{verbatim}
+% \category{9.9}
+% \end{verbatim}
+%
+% This will output the following scope: category{9.9}.
+% \section{Examples}
+%
+% This should be a relatively easy puzzle to solve.
+%
+% \end{documentation}
+% \begin{implementation}
+% \section{Implementation}
+%<*package>
+% \subsection{Initial set up}
+%
+% Load the essential support (\pkg{expl3}, tcolorbox, xstring and hyperref).
+%    \begin{macrocode}
+\RequirePackage{expl3}
+\RequirePackage[skins]{tcolorbox}
+\tcbuselibrary{xparse}
+\RequirePackage{xstring}
+\RequirePackage{hyperref}
+%    \end{macrocode}
+%
+% \subsection{Round up function}
+%
+% First we defined the roundup function\footnote{This function was inspired by the following posts: \url{https://tex.stackexchange.com/a/615358/28926}} according to the precision mentionned by FIRST (https://www.first.org/cvss/specification-document Appendix A).
+% .
+%    \begin{macrocode}
+\ExplSyntaxOn
+% 
+\cs_new:Npn \__CVSS_roundup:n #1 {
+	\fp_eval:n { ceil(#1,1) }
+	\fp_compare:nT { ceil(#1,1)=ceil(#1,0) } {.0}
+}
+%    \end{macrocode}
+%
+% \subsection{Error messages}
+% We define some error message to help with the troubleshooting
+%
+%    \begin{macrocode}
+\msg_new:nnn { CVSS } { invalid-option }{ Value~'#2'~invalid~for~#1~#3.}
+\msg_new:nnn { CVSS } { invalid-structure } { CVSS~metric~#1~is~not~correct~(#2)~#3.}
+\msg_new:nnn { CVSS } { invalid-length } { CVSS~vector~"#1"~is~badly~formatted~#2.}
+%    \end{macrocode}%
+%
+%
+% \subsection{CVSS metrics parsing}
+%
+% Then we can define the numerical values for each of the CVSS metric (Attack Vector, Attack Complexity, ...).
+% This is done by checking the string value of the argument, and outputting the correpsondant value.
+% For each function, a error message is thrown if the value is not one acceptable for that metric.
+%
+% \subsubsection{Attack Vector}
+% The value for the Attack Vector can only by either \texttt{N} (None), \texttt{A} (Adjacent), \texttt{L} (Local) or \texttt{P} (Physical).
+%
+%\begin{macro}{\__CVSS_parseAttackVector}
+%    \begin{macrocode}
+\cs_new:Npn \__CVSS_parseAttackVector:n #1
+{
+	\str_case_e:nnF {#1}
+	{
+		{ N } { 0.85 } % Network
+		{ A } { 0.62 } % Adjacent
+		{ L } { 0.55 } % Local
+		{ P } { 0.2 }  % Physical
+	}
+	{ \msg_error:nnxxx { CVSS } { invalid-option } { parseAttackVector } {#1} {\msg_line_context:} }
+}
+
+%    \end{macrocode}%
+%\end{macro}
+%
+% \subsubsection{Attack Complexity}
+% The value for the Attack Complexity metric can only by either \texttt{L} (Low) or \texttt{H} (High).
+%
+%\begin{macro}{\__CVSS_parseAttackComplexity}
+%    \begin{macrocode}
+\cs_new:Npn \__CVSS_parseAttackComplexity:n #1
+{
+	\str_case_e:nnF {#1}
+	{
+		{ H } { 0.44 }	% High
+		{ L } { 0.77 }	% Low
+	}
+	{ \msg_error:nnxxx { CVSS } { invalid-option } { parseAttackComplexity } {#1} {\msg_line_context:} }
+}
+
+
+%    \end{macrocode}%
+%\end{macro}
+%
+% \subsubsection{Privileges Required}
+% The value for the Privilged Required metric can only by either \texttt{N} (None), \texttt{L} (Low) or \texttt{H} (High).
+% Hoever since the computation is different wheter the Scope is changed or not, we've defined 2 functions.
+%
+% 3 Internal macros are thus used, one per choice (Scope unchanged and Scope change), plus the function to choose which one to take into account.
+%
+%    \begin{macrocode}
+\cs_new:Npn \__CVSS_parsePrivilegesRequiredScopeUnchanged:n #1
+{
+	\str_case_e:nnF {#1}
+	{
+		{ N } { 0.85 } % None
+		{ L } { 0.62 } % Low
+		{ H } { 0.27 } % High
+	}
+	{ \msg_error:nnxxx { CVSS } { invalid-option } { parsePrivilegesRequiredScopeUnchanged } {#1} {\msg_line_context:} }
+}
+
+
+
+\cs_new:Npn \__CVSS_parsePrivilegesRequiredScopeChanged:n #1
+{
+	\str_case_e:nnF {#1}
+	{
+		{ N } { 0.85 } % None
+		{ L } { 0.68 } % Low
+		{ H } { 0.50 } % High
+	}
+	{ \msg_error:nnxxx { CVSS } { invalid-option } { parsePrivilegesRequiredScopeChanged } {#1} {\msg_line_context:} }
+}
+
+%3 Privileges Required
+%None N, Low L, High H
+\cs_new:Npn \__CVSS_parsePrivilegesRequired:nn #1#2
+{
+	% #1 Privilege Required
+	% #2 Scope
+	\str_case_e:nnF {#2}
+	{
+		{ U } { \exp_args:Ne \__CVSS_parsePrivilegesRequiredScopeUnchanged:n {#1} }
+		{ C } { \exp_args:Ne \__CVSS_parsePrivilegesRequiredScopeChanged:n {#1} }
+	}
+	{ \msg_error:nnxxx { CVSS } { invalid-option } { parsePrivilegesRequired } {#1} {\msg_line_context:} }
+}
+
+%	\end{macrocode}
+%\end{macro}
+%
+% \subsubsection{User Interaction}
+% The value for the User Interaction metric can only by either \texttt{N} (None) or \texttt{R} (Required).
+%
+%\begin{macro}{\__CVSS_parseUserInteraction}
+%    \begin{macrocode}
+\cs_new:Npn \__CVSS_parseUserInteraction:n #1
+{
+	\str_case_e:nnF {#1}
+	{
+		{ N } { 0.85 } % None
+		{ R } { 0.62 } % Required
+	}
+	{ \msg_error:nnxxx { CVSS } { invalid-option } { parseUserInteraction } {#1} {\msg_line_context:} }
+}
+
+%	\end{macrocode}
+%\end{macro}
+%
+% \subsubsection{Confidentiality, Integrity and Availability}
+% The value for the Confidentiality, Integrity or Availability metrics can only by either \texttt{N} (None), \texttt{L} (Low) or \texttt{H} (High).
+% Since the values are the same for the 3 metrics, we've grouped them together.
+%
+%\begin{macro}{\__CVSS_parseUserInteraction}
+%    \begin{macrocode}
+
+\cs_new:Npn \__CVSS_parseCIA:n #1
+{
+	\str_case_e:nnF {#1}
+	{
+		{ H } { 0.56 }
+		{ L } { 0.22 }
+		{ N } { 0.00 }
+	}
+	{ \msg_error:nnxxx { CVSS } { invalid-option } { parseCIA } {#1} {\msg_line_context:} }
+}
+
+%	\end{macrocode}
+%\end{macro}
+%
+% \subsubsection{Confidentiality, Integrity and Availability}
+% The value for the Confidentiality, Integrity or Availability metrics can only by either \texttt{N} (None), \texttt{L} (Low) or \texttt{H} (High).
+% Since the values are the same for the 3 metrics, we've grouped them together.
+%
+%    \begin{macrocode}
+
+\cs_new:Npn \__CVSS_calcISCBase:nnn #1#2#3
+{
+	% #1 Confidentiality Impact %High H, Low L, None N
+	% #2 Integrity Impact %High H, Low L, None N
+	% #3 Availability Impact %High H, Low L, None N
+	1 - ( (1 - (\__CVSS_parseCIA:n {#1})) * (1 - (\__CVSS_parseCIA:n {#2})) * (1 - (\__CVSS_parseCIA:n {#3})) ) 
+}
+
+\cs_new:Npn \__CVSS_calcISC:nn #1#2
+{
+	% #1 = Scope
+	% #2 = ISCBase
+	% Scope Unchanged 6.42 × ISCBase
+	% Scope Changed 7.52 × [ISCBase-0.029] - 3.25 × [ISCBase-0.02]15
+	\str_case_e:nnF {#1}
+	{
+		{ U } { \fp_eval:n { 6.42 * (#2) } } % Scope UNCHANGED
+		{ C } { \fp_eval:n { 7.52 * ( (#2) - 0.029 ) - 3.25 * ( (#2) - 0.02 )^15 } } % Scope CHANGED
+	}
+	{ \msg_error:nnxxx { CVSS } { invalid-option } { calcISC } {#1} {\msg_line_context:} }
+}%
+
+
+\cs_new:Npn \__CVSS_calcAndParseExploitability:nnnnn #1#2#3#4#5
+{
+	% #1 Attack Vector
+	% #2 Attack Complexity
+	% #3 Privileges Required
+	% #4 User Interaction
+	% #5 Scope
+	% 8.22 × AttackVector × AttackComplexity × PrivilegeRequired × UserInteraction
+	8.22 * (\__CVSS_parseAttackVector:n {#1}) * (\__CVSS_parseAttackComplexity:n {#2}) * (\__CVSS_parsePrivilegesRequired:nn {#3}{#5}) * (\__CVSS_parseUserInteraction:n {#4})%
+}
+
+
+
+\cs_new:Npn \__CVSS_cvssBaseScore:nnnnnnnn #1#2#3#4#5#6#7#8 {
+	% #1 Attack Vector %Network N, Adjacent A, Local L, Physical P
+	% #2 Attack Complexity %Low L, High H
+	% #3 Privileges Required %None N, Low L, High H
+	% #4 User Interaction %None N, Required R
+	% #5 Scope %Unchanged U, Changed C
+	% #6 Confidentiality Impact %High H, Low L, None N
+	% #7 Integrity Impact %High H, Low L, None N
+	% #8 Availability Impact %High H, Low L, None N
+	%
+	\fp_compare:nTF { \exp_args:Ne \__CVSS_calcISC:nn {#5}{\exp_args:Ne \__CVSS_calcISCBase:nnn {#6}{#7}{#8}} <= 0 }
+	% IF ISC <=0
+	{
+		% ISC <=0
+		0.0
+	}{
+		% ISC > 0
+		\str_case_e:nnF {#5}
+		{
+			{ U } { % SCOPE UNCHANGED
+				\fp_eval:n { \__CVSS_roundup:n { min( ((\__CVSS_calcISC:nn {#5}{\__CVSS_calcISCBase:nnn {#6}{#7}{#8}}) + (\__CVSS_calcAndParseExploitability:nnnnn {#1}{#2}{#3}{#4}{#5})), 10) } }%
+			}
+			{ C } { % SCOPE CHANGED
+				\fp_eval:n { \__CVSS_roundup:n { min( (1.08 * ((\__CVSS_calcISC:nn {#5}{\__CVSS_calcISCBase:nnn {#6}{#7}{#8}}) + (\__CVSS_calcAndParseExploitability:nnnnn {#1}{#2}{#3}{#4}{#5}))), 10) } }%
+			}
+		}
+		{ \msg_error:nnxxx { CVSS } { invalid-option } { parseScope } {#1} {\msg_line_context:} }
+	}%
+}
+
+
+\NewExpandableDocumentCommand \cvssScore { m }{%
+	
+	% Check that there are 35 chars
+	\int_compare:nNnTF { \str_count_ignore_spaces:n {#1} } = {35}{}{
+		\msg_error:nnxx{CVSS}{invalid-length}{#1}{\msg_line_context:}
+	}
+	% Check AV value
+	\str_if_eq:eeTF {\str_range:nnn {#1} {1} {3}} {AV:} 
+	{} {
+		\msg_error:nnxxx{CVSS}{invalid-structure}{AV}{\str_range:nnn {#1} {1} {3}}{\msg_line_context:}
+	}
+	
+	% Check AC value
+	\str_if_eq:eeTF {\str_range:nnn {#1} {5} {8}} {/AC:} 
+	{} {
+		\msg_error:nnxxx{CVSS}{invalid-structure}{AC}{\str_range:nnn {#1} {5} {8}}{\msg_line_context:}
+	}
+	
+	
+	% Check PR value
+	\str_if_eq:eeTF {\str_range:nnn {#1} {10} {13}} {/PR:} 
+	{} {
+		\msg_error:nnxxx{CVSS}{invalid-structure}{PR}{\str_range:nnn {#1} {10} {13}}{\msg_line_context:}
+	}
+	
+	% Check UI value
+	\str_if_eq:eeTF {\str_range:nnn {#1} {15} {18}} {/UI:} 
+	{} {
+		\msg_error:nnxxx{CVSS}{invalid-structure}{UI}{\str_range:nnn {#1} {15} {18}}{\msg_line_context:}
+	}
+	
+	% Check S value
+	\str_if_eq:eeTF {\str_range:nnn {#1} {20} {22}} {/S:} 
+	{} {
+		\msg_error:nnxxx{CVSS}{invalid-structure}{S}{\str_range:nnn {#1} {20} {22}}{\msg_line_context:}
+	}
+	
+	% Check I value
+	\str_if_eq:eeTF {\str_range:nnn {#1} {24} {26}} {/C:} 
+	{} {
+		\msg_error:nnxxx{CVSS}{invalid-structure}{C}{\str_range:nnn {#1} {24} {26}}{\msg_line_context:}
+	}
+	
+	% Check I value
+	\str_if_eq:eeTF {\str_range:nnn {#1} {28} {30}} {/I:} 
+	{} {
+		\msg_error:nnxxx{CVSS}{invalid-structure}{I}{\str_range:nnn {#1} {28} {30}}{\msg_line_context:}
+	}
+	
+	% Check A value
+	\str_if_eq:eeTF {\str_range:nnn {#1} {32} {34}} {/A:} 
+	{} {
+		\msg_error:nnxxx{CVSS}{invalid-structure}{A}{\str_range:nnn {#1} {32} {34}}{\msg_line_context:}
+	}
+	
+	\exp_args:Ne \__CVSS_cvssBaseScore:nnnnnnnn
+	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 4 } }
+	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 9 } }
+	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 14 } }
+	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 19 } }
+	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 23 } }
+	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 27 } }
+	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 31 } }
+	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 35 } }
+	
+}%
+
+
+
+\NewExpandableDocumentCommand \cvssScoresplit { mmmmmmmm }
+{
+	\exp_args:Ne \__CVSS_cvssBaseScore:nnnnnnnn
+	{ #1 }
+	{ #2 }
+	{ #3 }
+	{ #4 }
+	{ #5 }
+	{ #6 } 
+	{ #7 }
+	{ #8 }
+}
+
+
+\ExplSyntaxOff
+
+% These are the thresholds
+\def\scoreCrit{9.0}
+\def\scoreHigh{7.0}
+\def\scoreMed{4.0}
+\def\scoreLow{0.1}
+
+	
+	\definecolor{color@cvss@None}{RGB}{83, 170, 51}
+	\definecolor{color@cvss@Low}{RGB}{255, 203, 13}
+	\definecolor{color@cvss@Medium}{RGB}{249, 160, 9}
+	\definecolor{color@cvss@High}{RGB}{223, 61, 3}
+	\definecolor{color@cvss@Critical}{RGB}{204, 5, 0}
+	
+	\DeclareTotalTCBox{\cvssFrame}{m}{
+		enhanced,nobeforeafter,
+		tcbox raise base,
+		boxrule=0.4pt,
+		top=0mm,bottom=0mm,right=1mm,left=1mm,
+		arc=1pt,
+		boxsep=2pt,
+		colframe=color@cvss@#1,
+		colback=tcbcolframe,
+		coltext=black,
+	}{#1}%
+	
+	\MakeRobust\cvssFrame
+	
+	\newcommand{\printCVSS}[1]{%
+		\def\CVSSscore{\cvssScore{#1}}
+		\cvssFrame{\category{\CVSSscore}} \quad \CVSSscore \quad%
+		\href{https://www.first.org/cvss/calculator/3.1\#CVSS:3.1/#1}{CVSS:3.1/#1}
+	}%
+	
+	\newcommand{\cvssTag}[1]{%
+		\def\CVSSscore{\cvssScore{#1}}%
+		\cvssFrame{\category{\CVSSscore}}%
+	}%
+	
+	\newcommand{\cvssLevel}[1]{%
+		\def\CVSSscore{\cvssScore{#1}}%
+		\category{\CVSSscore}%
+	}%
+	
+	\newcommand{\cvssLevelpretty}[1]{%
+		\def\CVSScategory{\category{\cvssScore{#1}}}%
+		\textcolor{color@cvss@\CVSScategory}{\CVSScategory}%
+	}%
+	
+	\newcommand{\cvssScorepretty}[1]{%
+		\def\CVSScategory{\category{\cvssScore{#1}}}%
+		\textcolor{color@cvss@\CVSScategory}{\cvssScore{#1}}%
+	}%
+
+%    \end{macrocode}
+%
+%
+%\StopEventually{
+%  \PrintChanges
+%  \PrintIndex
+%}
+%
+
+%
+%\begin{macro}{\examplemacro}
+%\changes{v1.0}{2022/11/03}{First public release}
+%    \begin{macrocode}
+\ExplSyntaxOn
+\NewExpandableDocumentCommand \category { m }{%
+	%\newcommand{\category}[1]{
+		\fp_compare:nNnTF {#1}<{\scoreLow}{None}
+		{
+			\fp_compare:nNnTF{#1}<{\scoreMed}{Low}
+			{
+				\fp_compare:nNnTF{#1}<{\scoreHigh}{Medium}
+				{
+					\fp_compare:nNnTF{#1}<{\scoreCrit}{High}
+					{Critical}
+				}%
+			}%
+		}%
+	}%
+\ExplSyntaxOff
+%    \end{macrocode}
+%\end{macro}
+%
+%</package>
+% \end{implementation}
+% \Finale
+\endinput

@@ -1,0 +1,50 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{cvss}
+
+\setlength{\parindent}{0pt}
+
+
+\begin{document}
+	
+		
+\section{Direct Form}
+
+AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N
+
+\cvssScore{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}
+
+\cvssLevel{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}
+
+\cvssLevelpretty{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H}
+
+\cvssTag{AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H}
+
+The vuln has a \textbf{\cvssLevel{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}}-level and we can output it inline \cvssTag{AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H} like this.
+
+\cvssTag{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H}
+
+\cvssLevelpretty{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H}
+
+\printCVSS{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}
+
+\section{Imbricated Form}
+
+AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N
+
+\cvssScore{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}
+
+\category{\cvssScore{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}}
+
+\cvssFrame{\category{\cvssScore{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}}}
+
+
+\section{Direct Macros}
+
+\cvssFrame{Low}
+
+\category{9.9}
+	
+\end{document}
