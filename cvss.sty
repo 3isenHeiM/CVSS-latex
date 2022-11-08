@@ -1,12 +1,34 @@
-\documentclass{article}
-\usepackage[a4paper, total={6in, 8in}]{geometry}
-\usepackage{pgfmath}
-\usepackage[dvipsnames,svgnames,table]{xcolor}
-\usepackage{lipsum}
-\usepackage[skins]{tcolorbox}
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{cvss}[2022/11/03 First Release]
+
+\RequirePackage[dvipsnames,svgnames,table]{xcolor}
+\RequirePackage[skins]{tcolorbox}
 \tcbuselibrary{xparse}
-\usepackage{xstring}
-\usepackage{hyperref}
+\RequirePackage{xstring}
+\RequirePackage{hyperref}
+
+%%% 'sans serif' option
+%\DeclareOption{sans}{
+%	\renewcommand{\familydefault}{\sfdefault}
+%}
+%
+%%% 'roman' option
+%\DeclareOption{roman}{
+%	\renewcommand{\familydefault}{\rmdefault}
+%}
+%
+%%% Global indentation option
+%\newif\if@neverindent\@neverindentfalse
+%\DeclareOption{neverindent}{
+%	\@neverindenttrue
+%}
+%
+%\ExecuteOptions{roman}
+%
+%\ProcessOptions\relax
+
+%% Traditional LaTeX or TeX follows...
+% ...
 
 % Equations from https://www.first.org/cvss/specification-document#i8
 % Values from https://www.first.org/cvss/specification-document#i8.4
@@ -240,23 +262,23 @@
 	{} {
 		\msg_error:nnnn{CVSS}{invalid-structure}{I}
 	}
-
+	
 	% Check A value
 	\str_if_eq:eeTF {\str_range:nnn {#1} {32} {34}} {/A:} 
 	{} {
-			\msg_error:nnnn{CVSS}{invalid-structure}{A}
+		\msg_error:nnnn{CVSS}{invalid-structure}{A}
 	}
-
+	
 	\exp_args:Ne \__CVSS_cvssBaseScore:nnnnnnnn
-		{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 4 } }
-		{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 9 } }
-		{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 14 } }
-		{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 19 } }
-		{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 23 } }
-		{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 27 } }
-		{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 31 } }
-		{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 35 } }
-
+	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 4 } }
+	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 9 } }
+	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 14 } }
+	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 19 } }
+	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 23 } }
+	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 27 } }
+	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 31 } }
+	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 35 } }
+	
 }%
 
 
@@ -301,11 +323,12 @@
 }%
 \ExplSyntaxOff
 
-\definecolor{color@cvss@None}{RGB}{83, 170, 51}
-\definecolor{color@cvss@Low}{RGB}{255, 203, 13}
-\definecolor{color@cvss@Medium}{RGB}{249, 160, 9}
-\definecolor{color@cvss@High}{RGB}{223, 61, 3}
-\definecolor{color@cvss@Critical}{RGB}{204, 5, 0}
+% Colors are from the FIRST website
+\definecolor{color@cvss@None}{HTML}{53aa33}
+\definecolor{color@cvss@Low}{HTML}{ffcb0d}
+\definecolor{color@cvss@Medium}{HTML}{f9a009}
+\definecolor{color@cvss@High}{HTML}{df3d03}
+\definecolor{color@cvss@Critical}{HTML}{cc0500}
 
 \DeclareTotalTCBox{\cvssFrame}{m}{
 	enhanced,nobeforeafter,
@@ -316,7 +339,7 @@
 	boxsep=2pt,
 	colframe=color@cvss@#1,
 	colback=tcbcolframe,
-	coltext=black,
+	coltext=white,
 }{#1}%
 
 \MakeRobust\cvssFrame
@@ -332,6 +355,11 @@
 	\cvssFrame{\category{\CVSSscore}}%
 }%
 
+\newcommand{\cvssColored}[1]{%
+	\def\CVSScategory{\category{\cvssScore{#1}}}%
+	\textcolor{color@cvss@\CVSScategory}{\CVSScategory}%
+}%
+
 \newcommand{\cvssLevel}[1]{%
 	\def\CVSSscore{\cvssScore{#1}}%
 	\category{\CVSSscore}%
@@ -343,73 +371,4 @@
 }
 
 
-\newcommand{\testCalculations}{%
-	Should be 7.3: \cvssScore{AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L}
-	
-	Should be 8.3: \cvssScore{AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:L}%
-	
-	Should be 9.9: \cvssScore{AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:H}%
-	
-	Should be 9.9: \cvssScore{AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:H/A:L}%
-	
-	Should be 7.2: \cvssScore{AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N}%
-	
-	Should be 7.1: \cvssScore{AV:A/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:L}%
-	
-	Should be 5.8: \cvssScore{AV:A/AC:H/PR:N/UI:N/S:C/C:L/I:L/A:L}%
-	
-	Should be 5.5: \cvssScore{AV:A/AC:H/PR:L/UI:N/S:C/C:L/I:L/A:L}%
-	
-	Should be 5.1: \cvssScore{AV:A/AC:H/PR:L/UI:R/S:C/C:L/I:L/A:L}%
-	
-	Should be 4.3: \cvssScore{AV:A/AC:H/PR:L/UI:R/S:U/C:L/I:L/A:L}%
-	
-	Should be 2.4: \cvssScore{AV:N/AC:L/PR:H/UI:R/S:U/C:L/I:N/A:N}
-	
-	Should be 0.0: \cvssScore{AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:N/A:N}
-	
-}
-
-
-\setlength{\parindent}{0pt}
-
-\begin{document}
-	
-
-	
-\section{Direct Form}
-	
-	AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N
-	
-	\cvssScore{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}
-	
-
-	
-	The vuln has a \textbf{\cvssLevel{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}}-level
-	
- 	\cvssTag{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H}
-	
-	\printCVSS{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}
-	
-\section{Imbricated Form}
-	
-	AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N
-	
-	\cvssScore{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}
-	
-	\category{\cvssScore{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}}
-	
-	\cvssFrame{\category{\cvssScore{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}}}
-	
-
-\section{Direct Macros}
-	
-	\cvssFrame{Low}
-	
-	\category{9.9}
-	
-\section{Test}
-
-\testCalculations
-	
-\end{document}
+\endinput
