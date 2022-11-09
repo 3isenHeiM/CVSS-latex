@@ -127,67 +127,281 @@ and the derived files           cvss.ins,
 %
 % The goal of this package is to compute the CVSS base score for an input CVSS vector, and to give the user macro to output it in 3 different forms
 % \begin{itemize}
-%	\item The CVSS \textbf{score} (fron 0.0 to 10)
-%	\item the \textbf{level} (None, Info, Low, Medium, High or Critical)
-%	\item the \textbf{colored level}
-%	\item the \textbf{tag} which is a colored frame around the level
+%     \item The CVSS \textbf{score} (fron 0.0 to 10)
+%     \item the \textbf{level} (None, Info, Low, Medium, High or Critical)
+%     \item the \textbf{colored level}
+%     \item the \textbf{tag} which is a colored frame around the level
 % \end{itemize}
 %
 % All macros are expandable, which makes them usable in any context.
 %
 % The macros of this packages are divided in 2 categories: 
 % \begin{itemize}
-% 	\item \textbf{direct macros} : that will take as input the CVSS base score and give you the result
+%      \item \textbf{direct macros} : that will take as input the CVSS base score and give you the result
 %   \item \textbf{indirect macros} : that are intermediary, in the way that they only compute a form based on the precedent one.
 % \end{itemize}
 %
 % \subsection{Direct Macros}
-%
-% \DescribeMacro{\cvssScore}
+% \begin{function}{\cvssScore}
+     %   \begin{syntax}
+          %     \cs{cvssScore} \Arg{CVSS string}
+          %   \end{syntax}
 % This is the main macro of this package, responsible for computing the base CVSS 3.1 score of an \marg{input vector} (without \texttt{CVSS3.1/}). The output of this macro is a floating point CVSS score, for example \texttt{5.4}.
+% \end{function}
+%
+%   \noindent\llap{\bfseries \textcolor{red}{Important!}\qquad}\indent
+%   \textbf{The CVSS vector string must be stripped from the \texttt{CVSS3.1/}!}
+%
 %
 % \begin{verbatim}
 % \cvssScore{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}
 % \end{verbatim}
 %
-% This will output the following CVSS base score: 5.3
+% This will output the following CVSS base score: \texttt{\cvssScore{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}}
 %
-% \DescribeMacro{\cvssLevel}
-% This macro will output the CVSS level from an \marg{input vector} (without \texttt{CVSS3.1/}), for example \texttt{Info}.
+%
+% \begin{function}{\cvssScorepretty}
+     %   \begin{syntax}
+          %     \cs{cvssScorepretty} \Arg{CVSS string}
+          %   \end{syntax}
+     % This macro will print a \textbf{colored} base CVSS 3.1 score of an \marg{input vector} (without \texttt{CVSS3.1/}). The output of this macro is a floating point CVSS score.
+     % \end{function}
 %
 % \begin{verbatim}
-% \cvssLevel{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}
+% \cvssScorepretty{AV:N/AC:H/PR:H/UI:R/S:U/C:H/I:L/A:N}
 % \end{verbatim}
 %
-% This will output the following CVSS level: \textbf{Info}
-
+% This will output the following CVSS score: \cvssScorepretty{AV:N/AC:H/PR:H/UI:R/S:U/C:H/I:L/A:N}
+%
+%
+% \begin{function}{\cvssLevel}
+     %   \begin{syntax}
+     %     \cs{cvssLevel} \Arg{CVSS string}
+     %   \end{syntax}
+% This macro will output the CVSS level from an \marg{input vector} (without \texttt{CVSS3.1/}), for example \texttt{Info}.
+% \end{function}
+%
+% \begin{verbatim}
+% \cvssLevel{AV:A/AC:H/PR:H/UI:R/S:U/C:H/I:L/A:N}
+% \end{verbatim}
+%
+% This will output the following CVSS level: \cvssLevel{AV:A/AC:H/PR:H/UI:R/S:U/C:H/I:L/A:N}
+%
+%
+% \begin{function}{\cvssLevelpretty}
+     %   \begin{syntax}
+     %     \cs{cvssLevelpretty} \Arg{CVSS string}
+     %   \end{syntax}
+% This macro will output the \textbf{colored} CVSS level from an \marg{input vector} (without \texttt{CVSS3.1/}).
+% \end{function}
+%
+% \begin{verbatim}
+% \cvssLevelpretty{AV:A/AC:H/PR:H/UI:R/S:U/C:L/I:L/A:N}
+% \end{verbatim}
+%
+% This will output the following CVSS level: \cvssLevelpretty{AV:A/AC:H/PR:H/UI:R/S:U/C:L/I:L/A:N}
+%
+%
+% \begin{function}{\cvssTag}
+     %   \begin{syntax}
+     %     \cs{cvssTag} \Arg{CVSS string}
+     %   \end{syntax}
+% This macro will output a colored tag with the CVSS level inside, from an \marg{input vector} (without \texttt{CVSS3.1/}).
+% \end{function}
+%
+% \begin{verbatim}
+% \cvssTag{AV:A/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N}
+% \end{verbatim}
+%
+% This will output the following CVSS level: \cvssTag{AV:A/AC:H/PR:H/UI:R/S:U/C:N/I:N/A:N}.
+%
+%
+% \begin{function}{\cvssPrint}
+     %   \begin{syntax}
+          %     \cs{cvssPrint} \Arg{CVSS string}
+          %   \end{syntax}
+     % This macro will print all details of a CVSS string: colored level, score, and hyperlink to FIRST calculator, from an \marg{input vector} (without \texttt{CVSS3.1/}).
+     % \end{function}
+%
+% \begin{verbatim}
+% \cvssPrint{AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H}
+% \end{verbatim}
+%
+% This will output the following CVSS level:
+%
+% \cvssPrint{AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H}
+%
+%
+%
 % \subsection{Indirect Macros}
 %
 % \changes{v1.0}{2022/11/03}{First public release}
 %
-
-%
-% \DescribeMacro{\category}
-% This macro will output the CVSS category (None, Info, Low, Medium, High or Critical) based on the input CVSS vector passed as argument \marg{numerical score}. The mandatory argument is a floating point CVSS score, for excanple \texttt{5.4}.
-% might have an optional argument \oarg{score} and mandatory one
-% \marg{arg2}.
+% \begin{function}{\category}
+     %   \begin{syntax}
+     %     \cs{category} \Arg{CVSS score}
+     %   \end{syntax}
+% This macro will output the CVSS category (None, Info, Low, Medium, High or Critical) based on the input CVSS vector passed as argument \marg{numerical score}. The mandatory argument is a floating point CVSS score, for example \texttt{5.4}.
+% \end{function}
 %
 % \begin{verbatim}
 % \category{9.9}
 % \end{verbatim}
 %
-% This will output the following scope: category{9.9}.
+% This will output the following scope: \category{9.9}.
+%
+%
+% \begin{function}{\cvssFrame}
+     %   \begin{syntax}
+          %     \cs{cvssFrame} \Arg{CVSS score}
+          %   \end{syntax}
+     % This macro will output a CVSS tag based on a CVSS \textbf{level} passed as argument. The mandatory argument must be one of the defined CVSS levels (None, Info, Low, Medium, High or Critical), for example \texttt{Info}.
+     % \end{function}
+%
+% \begin{verbatim}
+% \cvssFrame{High}
+% \end{verbatim}
+%
+% This will output the following tag: \cvssFrame{High}.
+%
+%
+
 % \section{Examples}
 %
-% This should be a relatively easy puzzle to solve.
+% \subsection{Direct Form}
+
+%\begin{minipage}{.75\textwidth}
+     % \begin{verbatim}
+%\\cvssScore{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}
+     % \end{verbatim}
+     %\end{minipage}%
+%\begin{minipage}{0.25\textwidth}
+%\cvssScore{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}
+     %\end{minipage}
+
+%\begin{minipage}{.75\textwidth}
+     % \begin{verbatim}
+%\\cvssLevel{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}
+     % \end{verbatim}
+     %\end{minipage}%
+%\begin{minipage}{0.25\textwidth}
+%\cvssLevel{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}
+     %\end{minipage}
+
+
+%\begin{minipage}{.75\textwidth}
+     % \begin{verbatim}
+%\\cvssLevelpretty{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H}
+     % \end{verbatim}
+     %\end{minipage}%
+%\begin{minipage}{0.25\textwidth}
+%\cvssLevelpretty{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H}
+     %\end{minipage}
+
+%\begin{minipage}{.75\textwidth}
+     % \begin{verbatim}
+%\\cvssTag{AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H}
+     % \end{verbatim}
+     %\end{minipage}%
+%\begin{minipage}{0.25\textwidth}
+%\cvssTag{AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H}
+     %\end{minipage}
+
+%
+% The vuln has a  \textbf{\cvssLevel{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}}-level and we can output it inline.
+%\subsection{Imbricated Form}
+
+%\begin{minipage}{.5\textwidth}
+     % \begin{verbatim}
+     %\cvssFrame{Low}
+     % \end{verbatim}
+     %\end{minipage}%
+%\begin{minipage}{0.5\textwidth}
+     %\cvssFrame{Low}
+%\end{minipage}
+
+%\begin{minipage}{.5\textwidth}
+%     \begin{verbatim}
+     %\category{9.9}
+%     \end{verbatim}
+%\end{minipage}%
+%\begin{minipage}{0.5\textwidth}
+     %\category{9.9}
+%\end{minipage}
+%
+% We can even combine them:
+% \begin{verbatim}
+%\\category{\cvssScore{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}}
+% \end{verbatim}
+%
+%And this outputs: \category{\cvssScore{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}}
+%
+% \begin{verbatim}
+%\\cvssFrame{\category{\cvssScore{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}}}
+% \end{verbatim}
+% And the result is: %\cvssFrame{\category{\cvssScore{AV:L/AC:H/PR:N/UI:R/S:U/C:H/I:L/A:N}}}
+%
+%\subsection{Test Computations}
+% \begin{verbatim}
+% Should be 7.3: \cvssScore{AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L}
+%
+% Should be 8.3: \cvssScore{AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:L}
+%
+% Should be 9.9: \cvssScore{AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:H}
+%
+% Should be 9.9: \cvssScore{AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:H/A:L}
+%
+% Should be 7.2: \cvssScore{AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N}
+%
+% Should be 7.1: \cvssScore{AV:A/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:L}
+%
+% Should be 5.8: \cvssScore{AV:A/AC:H/PR:N/UI:N/S:C/C:L/I:L/A:L}
+%
+% Should be 5.5: \cvssScore{AV:A/AC:H/PR:L/UI:N/S:C/C:L/I:L/A:L}
+%
+% Should be 5.1: \cvssScore{AV:A/AC:H/PR:L/UI:R/S:C/C:L/I:L/A:L}
+%
+% Should be 4.3: \cvssScore{AV:A/AC:H/PR:L/UI:R/S:U/C:L/I:L/A:L}
+%
+% Should be 2.4: \cvssScore{AV:N/AC:L/PR:H/UI:R/S:U/C:L/I:N/A:N}
+%
+% Should be 0.0: \cvssScore{AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:N/A:N}
+% \end{verbatim}
+%
+% And the results of the computations:
+%
+%Should be 7.3: \cvssScore{AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L}
+%
+%Should be 8.3: \cvssScore{AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:L}%
+%
+%Should be 9.9: \cvssScore{AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:H}%
+%
+%Should be 9.9: \cvssScore{AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:H/A:L}%
+%
+%Should be 7.2: \cvssScore{AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N}%
+%
+%Should be 7.1: \cvssScore{AV:A/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:L}%
+%
+%Should be 5.8: \cvssScore{AV:A/AC:H/PR:N/UI:N/S:C/C:L/I:L/A:L}%
+%
+%Should be 5.5: \cvssScore{AV:A/AC:H/PR:L/UI:N/S:C/C:L/I:L/A:L}%
+%
+%Should be 5.1: \cvssScore{AV:A/AC:H/PR:L/UI:R/S:C/C:L/I:L/A:L}%
+%
+%Should be 4.3: \cvssScore{AV:A/AC:H/PR:L/UI:R/S:U/C:L/I:L/A:L}%
+%
+%Should be 2.4: \cvssScore{AV:N/AC:L/PR:H/UI:R/S:U/C:L/I:N/A:N}
+%
+%Should be 0.0: \cvssScore{AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:N/A:N}
 %
 % \end{documentation}
+%\newpage
+% \StopEventually{\setlength\IndexMin{200pt}  \PrintIndex  }
 % \begin{implementation}
 % \section{Implementation}
-%<*package>
 % \subsection{Initial set up}
 %
-% Load the essential support (\pkg{expl3}, tcolorbox, xstring and hyperref).
+% Load the essential support (\pkg{expl3}, \pkg{tcolorbox}, \pkg{xstring} and \pkg{hyperref}).
 %    \begin{macrocode}
 \RequirePackage{expl3}
 \RequirePackage[skins]{tcolorbox}
@@ -196,16 +410,33 @@ and the derived files           cvss.ins,
 \RequirePackage{hyperref}
 %    \end{macrocode}
 %
+% Then, we define the thresholds:
+%    \begin{macrocode}
+% These are the thresholds
+\def\scoreLow{0.1}
+\def\scoreMed{4.0}
+\def\scoreHigh{7.0}
+\def\scoreCrit{9.0}
+%    \end{macrocode}
+% And finally the colors for each level (taken from the FIRST CVSS calulator website\footnote{Available at \url{https://www.first.org/cvss/calculator/3.1}})
+%    \begin{macrocode}
+\definecolor{color@cvss@None}{RGB}{83, 170, 51}
+\definecolor{color@cvss@Low}{RGB}{255, 203, 13}
+\definecolor{color@cvss@Medium}{RGB}{249, 160, 9}
+\definecolor{color@cvss@High}{RGB}{223, 61, 3}
+\definecolor{color@cvss@Critical}{RGB}{204, 5, 0}
+%    \end{macrocode}
+%
 % \subsection{Round up function}
 %
-% First we defined the roundup function\footnote{This function was inspired by the following posts: \url{https://tex.stackexchange.com/a/615358/28926}} according to the precision mentionned by FIRST (https://www.first.org/cvss/specification-document Appendix A).
+% First we defined the \texttt{roundup} function\footnote{This function was inspired by the following posts: \url{https://tex.stackexchange.com/a/615358/28926}} according to the precision mentionned by FIRST (\url{https://www.first.org/cvss/specification-document Appendix A}).
 % .
 %    \begin{macrocode}
 \ExplSyntaxOn
 % 
 \cs_new:Npn \__CVSS_roundup:n #1 {
-	\fp_eval:n { ceil(#1,1) }
-	\fp_compare:nT { ceil(#1,1)=ceil(#1,0) } {.0}
+         \fp_eval:n { ceil(#1,1) }
+         \fp_compare:nT { ceil(#1,1)=ceil(#1,0) } {.0}
 }
 %    \end{macrocode}
 %
@@ -228,40 +459,38 @@ and the derived files           cvss.ins,
 % \subsubsection{Attack Vector}
 % The value for the Attack Vector can only by either \texttt{N} (None), \texttt{A} (Adjacent), \texttt{L} (Local) or \texttt{P} (Physical).
 %
-%\begin{macro}{\__CVSS_parseAttackVector}
+%\begin{macro}{\__CVSS_parseAV}
 %    \begin{macrocode}
-\cs_new:Npn \__CVSS_parseAttackVector:n #1
+\cs_new:Npn \__CVSS_parseAV:n #1
 {
-	\str_case_e:nnF {#1}
-	{
-		{ N } { 0.85 } % Network
-		{ A } { 0.62 } % Adjacent
-		{ L } { 0.55 } % Local
-		{ P } { 0.2 }  % Physical
-	}
-	{ \msg_error:nnxxx { CVSS } { invalid-option } { parseAttackVector } {#1} {\msg_line_context:} }
+     \str_case_e:nnF {#1}
+     {
+          { N } { 0.85 } % Network
+          { A } { 0.62 } % Adjacent
+          { L } { 0.55 } % Local
+          { P } { 0.2 }  % Physical
+     }
+     { \msg_error:nnxxx { CVSS } { invalid-option } { parseAV } {#1} {\msg_line_context:} }
 }
-
 %    \end{macrocode}%
 %\end{macro}
 %
 % \subsubsection{Attack Complexity}
 % The value for the Attack Complexity metric can only by either \texttt{L} (Low) or \texttt{H} (High).
 %
-%\begin{macro}{\__CVSS_parseAttackComplexity}
+%\begin{macro}{\__CVSS_parseAC}
 %    \begin{macrocode}
-\cs_new:Npn \__CVSS_parseAttackComplexity:n #1
+\cs_new:Npn \__CVSS_parseAC:n #1
 {
-	\str_case_e:nnF {#1}
-	{
-		{ H } { 0.44 }	% High
-		{ L } { 0.77 }	% Low
-	}
-	{ \msg_error:nnxxx { CVSS } { invalid-option } { parseAttackComplexity } {#1} {\msg_line_context:} }
+     \str_case_e:nnF {#1}
+     {
+          { H } { 0.44 }     % High
+          { L } { 0.77 }     % Low
+          
+     }
+     { \msg_error:nnxxx { CVSS } { invalid-option } { parseAC } {#1} {\msg_line_context:} }
 }
-
-
-%    \end{macrocode}%
+%    \end{macrocode}
 %\end{macro}
 %
 % \subsubsection{Privileges Required}
@@ -270,331 +499,400 @@ and the derived files           cvss.ins,
 %
 % 3 Internal macros are thus used, one per choice (Scope unchanged and Scope change), plus the function to choose which one to take into account.
 %
+%\begin{macro}{\__CVSS_parsePRScopeUnchanged}
 %    \begin{macrocode}
-\cs_new:Npn \__CVSS_parsePrivilegesRequiredScopeUnchanged:n #1
+\cs_new:Npn \__CVSS_parsePRScopeUnchanged:n #1
 {
-	\str_case_e:nnF {#1}
-	{
-		{ N } { 0.85 } % None
-		{ L } { 0.62 } % Low
-		{ H } { 0.27 } % High
-	}
-	{ \msg_error:nnxxx { CVSS } { invalid-option } { parsePrivilegesRequiredScopeUnchanged } {#1} {\msg_line_context:} }
+     \str_case_e:nnF {#1}
+     {
+          { N } { 0.85 } % None
+          { L } { 0.62 } % Low
+          { H } { 0.27 } % High
+     }
+     { \msg_error:nnxxx { CVSS } { invalid-option } { parsePRScopeUnchanged } {#1} {\msg_line_context:} }
 }
-
-
-
-\cs_new:Npn \__CVSS_parsePrivilegesRequiredScopeChanged:n #1
+%    \end{macrocode}%
+%\end{macro}
+%\begin{macro}{\__CVSS_parsePRScopeChanged}
+%    \begin{macrocode}
+\cs_new:Npn \__CVSS_parsePRScopeChanged:n #1
 {
-	\str_case_e:nnF {#1}
-	{
-		{ N } { 0.85 } % None
-		{ L } { 0.68 } % Low
-		{ H } { 0.50 } % High
-	}
-	{ \msg_error:nnxxx { CVSS } { invalid-option } { parsePrivilegesRequiredScopeChanged } {#1} {\msg_line_context:} }
+     \str_case_e:nnF {#1}
+     {
+          { N } { 0.85 } % None
+          { L } { 0.68 } % Low
+          { H } { 0.50 } % High
+     }
+     { \msg_error:nnxxx { CVSS } { invalid-option } { parsePRScopeChanged } {#1} {\msg_line_context:} }
 }
-
-%3 Privileges Required
-%None N, Low L, High H
-\cs_new:Npn \__CVSS_parsePrivilegesRequired:nn #1#2
+%    \end{macrocode}%
+%\end{macro}
+%\begin{macro}{\__CVSS_parsePR}
+%    \begin{macrocode}
+\cs_new:Npn \__CVSS_parsePR:nn #1#2
 {
-	% #1 Privilege Required
-	% #2 Scope
-	\str_case_e:nnF {#2}
-	{
-		{ U } { \exp_args:Ne \__CVSS_parsePrivilegesRequiredScopeUnchanged:n {#1} }
-		{ C } { \exp_args:Ne \__CVSS_parsePrivilegesRequiredScopeChanged:n {#1} }
-	}
-	{ \msg_error:nnxxx { CVSS } { invalid-option } { parsePrivilegesRequired } {#1} {\msg_line_context:} }
+     % #1 Privilege Required
+     % #2 Scope
+     \str_case_e:nnF {#2}
+     {
+          { U } { \exp_args:Ne \__CVSS_parsePRScopeUnchanged:n {#1} }
+          { C } { \exp_args:Ne \__CVSS_parsePRScopeChanged:n {#1} }
+     }
+     { \msg_error:nnxxx { CVSS } { invalid-option } { parsePR } {#1} {\msg_line_context:} }
 }
-
-%	\end{macrocode}
+%    \end{macrocode}%
 %\end{macro}
 %
 % \subsubsection{User Interaction}
 % The value for the User Interaction metric can only by either \texttt{N} (None) or \texttt{R} (Required).
 %
-%\begin{macro}{\__CVSS_parseUserInteraction}
+%\begin{macro}{\__CVSS_parseUI}
 %    \begin{macrocode}
-\cs_new:Npn \__CVSS_parseUserInteraction:n #1
+\cs_new:Npn \__CVSS_parseUI:n #1
 {
-	\str_case_e:nnF {#1}
-	{
-		{ N } { 0.85 } % None
-		{ R } { 0.62 } % Required
-	}
-	{ \msg_error:nnxxx { CVSS } { invalid-option } { parseUserInteraction } {#1} {\msg_line_context:} }
+     \str_case_e:nnF {#1}
+     {
+          { N } { 0.85 } % None
+          { R } { 0.62 } % Required
+     }
+     { \msg_error:nnxxx { CVSS } { invalid-option } { parseUI } {#1} {\msg_line_context:} }
 }
 
-%	\end{macrocode}
+%    \end{macrocode}
 %\end{macro}
 %
 % \subsubsection{Confidentiality, Integrity and Availability}
 % The value for the Confidentiality, Integrity or Availability metrics can only by either \texttt{N} (None), \texttt{L} (Low) or \texttt{H} (High).
 % Since the values are the same for the 3 metrics, we've grouped them together.
 %
-%\begin{macro}{\__CVSS_parseUserInteraction}
+%\begin{macro}{\__CVSS_parseCIA}
 %    \begin{macrocode}
 
 \cs_new:Npn \__CVSS_parseCIA:n #1
 {
-	\str_case_e:nnF {#1}
-	{
-		{ H } { 0.56 }
-		{ L } { 0.22 }
-		{ N } { 0.00 }
-	}
-	{ \msg_error:nnxxx { CVSS } { invalid-option } { parseCIA } {#1} {\msg_line_context:} }
+     \str_case_e:nnF {#1}
+     {
+          { H } { 0.56 }
+          { L } { 0.22 }
+          { N } { 0.00 }
+     }
+     { \msg_error:nnxxx { CVSS } { invalid-option } { parseCIA } {#1} {\msg_line_context:} }
 }
-
-%	\end{macrocode}
+%    \end{macrocode}
 %\end{macro}
 %
-% \subsubsection{Confidentiality, Integrity and Availability}
-% The value for the Confidentiality, Integrity or Availability metrics can only by either \texttt{N} (None), \texttt{L} (Low) or \texttt{H} (High).
-% Since the values are the same for the 3 metrics, we've grouped them together.
+% \subsection{CVSS computation}
+% \subsubsection{Impact Sub Score (ISS)}
+% The value for the Impact Sub-Score (ISS) is conmputed from the Confidentiality, Availability and Integrity values, as follows
+%\begin{equation}
+%     ISS =      1 - \Bigr[ (1 - \text{Confidentiality}) \times (1 - \text{Integrity}) \times (1 - \text{Availability}) \Bigr]
+%\end{equation}
 %
+% This equation is then translated into \TeX code :
+%
+%\begin{macro}{\__CVSS_calcISS}
 %    \begin{macrocode}
-
-\cs_new:Npn \__CVSS_calcISCBase:nnn #1#2#3
+\cs_new:Npn \__CVSS_calcISS:nnn #1#2#3
 {
-	% #1 Confidentiality Impact %High H, Low L, None N
-	% #2 Integrity Impact %High H, Low L, None N
-	% #3 Availability Impact %High H, Low L, None N
-	1 - ( (1 - (\__CVSS_parseCIA:n {#1})) * (1 - (\__CVSS_parseCIA:n {#2})) * (1 - (\__CVSS_parseCIA:n {#3})) ) 
+     % #1 Confidentiality Impact %High H, Low L, None N
+     % #2 Integrity Impact %High H, Low L, None N
+     % #3 Availability Impact %High H, Low L, None N
+     1 - ( (1 - (\__CVSS_parseCIA:n {#1})) * (1 - (\__CVSS_parseCIA:n {#2})) * (1 - (\__CVSS_parseCIA:n {#3})) ) 
 }
-
-\cs_new:Npn \__CVSS_calcISC:nn #1#2
-{
-	% #1 = Scope
-	% #2 = ISCBase
-	% Scope Unchanged 6.42 × ISCBase
-	% Scope Changed 7.52 × [ISCBase-0.029] - 3.25 × [ISCBase-0.02]15
-	\str_case_e:nnF {#1}
-	{
-		{ U } { \fp_eval:n { 6.42 * (#2) } } % Scope UNCHANGED
-		{ C } { \fp_eval:n { 7.52 * ( (#2) - 0.029 ) - 3.25 * ( (#2) - 0.02 )^15 } } % Scope CHANGED
-	}
-	{ \msg_error:nnxxx { CVSS } { invalid-option } { calcISC } {#1} {\msg_line_context:} }
-}%
-
-
-\cs_new:Npn \__CVSS_calcAndParseExploitability:nnnnn #1#2#3#4#5
-{
-	% #1 Attack Vector
-	% #2 Attack Complexity
-	% #3 Privileges Required
-	% #4 User Interaction
-	% #5 Scope
-	% 8.22 × AttackVector × AttackComplexity × PrivilegeRequired × UserInteraction
-	8.22 * (\__CVSS_parseAttackVector:n {#1}) * (\__CVSS_parseAttackComplexity:n {#2}) * (\__CVSS_parsePrivilegesRequired:nn {#3}{#5}) * (\__CVSS_parseUserInteraction:n {#4})%
-}
-
-
-
-\cs_new:Npn \__CVSS_cvssBaseScore:nnnnnnnn #1#2#3#4#5#6#7#8 {
-	% #1 Attack Vector %Network N, Adjacent A, Local L, Physical P
-	% #2 Attack Complexity %Low L, High H
-	% #3 Privileges Required %None N, Low L, High H
-	% #4 User Interaction %None N, Required R
-	% #5 Scope %Unchanged U, Changed C
-	% #6 Confidentiality Impact %High H, Low L, None N
-	% #7 Integrity Impact %High H, Low L, None N
-	% #8 Availability Impact %High H, Low L, None N
-	%
-	\fp_compare:nTF { \exp_args:Ne \__CVSS_calcISC:nn {#5}{\exp_args:Ne \__CVSS_calcISCBase:nnn {#6}{#7}{#8}} <= 0 }
-	% IF ISC <=0
-	{
-		% ISC <=0
-		0.0
-	}{
-		% ISC > 0
-		\str_case_e:nnF {#5}
-		{
-			{ U } { % SCOPE UNCHANGED
-				\fp_eval:n { \__CVSS_roundup:n { min( ((\__CVSS_calcISC:nn {#5}{\__CVSS_calcISCBase:nnn {#6}{#7}{#8}}) + (\__CVSS_calcAndParseExploitability:nnnnn {#1}{#2}{#3}{#4}{#5})), 10) } }%
-			}
-			{ C } { % SCOPE CHANGED
-				\fp_eval:n { \__CVSS_roundup:n { min( (1.08 * ((\__CVSS_calcISC:nn {#5}{\__CVSS_calcISCBase:nnn {#6}{#7}{#8}}) + (\__CVSS_calcAndParseExploitability:nnnnn {#1}{#2}{#3}{#4}{#5}))), 10) } }%
-			}
-		}
-		{ \msg_error:nnxxx { CVSS } { invalid-option } { parseScope } {#1} {\msg_line_context:} }
-	}%
-}
-
-
-\NewExpandableDocumentCommand \cvssScore { m }{%
-	
-	% Check that there are 35 chars
-	\int_compare:nNnTF { \str_count_ignore_spaces:n {#1} } = {35}{}{
-		\msg_error:nnxx{CVSS}{invalid-length}{#1}{\msg_line_context:}
-	}
-	% Check AV value
-	\str_if_eq:eeTF {\str_range:nnn {#1} {1} {3}} {AV:} 
-	{} {
-		\msg_error:nnxxx{CVSS}{invalid-structure}{AV}{\str_range:nnn {#1} {1} {3}}{\msg_line_context:}
-	}
-	
-	% Check AC value
-	\str_if_eq:eeTF {\str_range:nnn {#1} {5} {8}} {/AC:} 
-	{} {
-		\msg_error:nnxxx{CVSS}{invalid-structure}{AC}{\str_range:nnn {#1} {5} {8}}{\msg_line_context:}
-	}
-	
-	
-	% Check PR value
-	\str_if_eq:eeTF {\str_range:nnn {#1} {10} {13}} {/PR:} 
-	{} {
-		\msg_error:nnxxx{CVSS}{invalid-structure}{PR}{\str_range:nnn {#1} {10} {13}}{\msg_line_context:}
-	}
-	
-	% Check UI value
-	\str_if_eq:eeTF {\str_range:nnn {#1} {15} {18}} {/UI:} 
-	{} {
-		\msg_error:nnxxx{CVSS}{invalid-structure}{UI}{\str_range:nnn {#1} {15} {18}}{\msg_line_context:}
-	}
-	
-	% Check S value
-	\str_if_eq:eeTF {\str_range:nnn {#1} {20} {22}} {/S:} 
-	{} {
-		\msg_error:nnxxx{CVSS}{invalid-structure}{S}{\str_range:nnn {#1} {20} {22}}{\msg_line_context:}
-	}
-	
-	% Check I value
-	\str_if_eq:eeTF {\str_range:nnn {#1} {24} {26}} {/C:} 
-	{} {
-		\msg_error:nnxxx{CVSS}{invalid-structure}{C}{\str_range:nnn {#1} {24} {26}}{\msg_line_context:}
-	}
-	
-	% Check I value
-	\str_if_eq:eeTF {\str_range:nnn {#1} {28} {30}} {/I:} 
-	{} {
-		\msg_error:nnxxx{CVSS}{invalid-structure}{I}{\str_range:nnn {#1} {28} {30}}{\msg_line_context:}
-	}
-	
-	% Check A value
-	\str_if_eq:eeTF {\str_range:nnn {#1} {32} {34}} {/A:} 
-	{} {
-		\msg_error:nnxxx{CVSS}{invalid-structure}{A}{\str_range:nnn {#1} {32} {34}}{\msg_line_context:}
-	}
-	
-	\exp_args:Ne \__CVSS_cvssBaseScore:nnnnnnnn
-	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 4 } }
-	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 9 } }
-	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 14 } }
-	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 19 } }
-	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 23 } }
-	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 27 } }
-	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 31 } }
-	{ \str_use:N \str_item_ignore_spaces:nn { #1 }{ 35 } }
-	
-}%
-
-
-
-\NewExpandableDocumentCommand \cvssScoresplit { mmmmmmmm }
-{
-	\exp_args:Ne \__CVSS_cvssBaseScore:nnnnnnnn
-	{ #1 }
-	{ #2 }
-	{ #3 }
-	{ #4 }
-	{ #5 }
-	{ #6 } 
-	{ #7 }
-	{ #8 }
-}
-
-
-\ExplSyntaxOff
-
-% These are the thresholds
-\def\scoreCrit{9.0}
-\def\scoreHigh{7.0}
-\def\scoreMed{4.0}
-\def\scoreLow{0.1}
-
-	
-	\definecolor{color@cvss@None}{RGB}{83, 170, 51}
-	\definecolor{color@cvss@Low}{RGB}{255, 203, 13}
-	\definecolor{color@cvss@Medium}{RGB}{249, 160, 9}
-	\definecolor{color@cvss@High}{RGB}{223, 61, 3}
-	\definecolor{color@cvss@Critical}{RGB}{204, 5, 0}
-	
-	\DeclareTotalTCBox{\cvssFrame}{m}{
-		enhanced,nobeforeafter,
-		tcbox raise base,
-		boxrule=0.4pt,
-		top=0mm,bottom=0mm,right=1mm,left=1mm,
-		arc=1pt,
-		boxsep=2pt,
-		colframe=color@cvss@#1,
-		colback=tcbcolframe,
-		coltext=black,
-	}{#1}%
-	
-	\MakeRobust\cvssFrame
-	
-	\newcommand{\printCVSS}[1]{%
-		\def\CVSSscore{\cvssScore{#1}}
-		\cvssFrame{\category{\CVSSscore}} \quad \CVSSscore \quad%
-		\href{https://www.first.org/cvss/calculator/3.1\#CVSS:3.1/#1}{CVSS:3.1/#1}
-	}%
-	
-	\newcommand{\cvssTag}[1]{%
-		\def\CVSSscore{\cvssScore{#1}}%
-		\cvssFrame{\category{\CVSSscore}}%
-	}%
-	
-	\newcommand{\cvssLevel}[1]{%
-		\def\CVSSscore{\cvssScore{#1}}%
-		\category{\CVSSscore}%
-	}%
-	
-	\newcommand{\cvssLevelpretty}[1]{%
-		\def\CVSScategory{\category{\cvssScore{#1}}}%
-		\textcolor{color@cvss@\CVSScategory}{\CVSScategory}%
-	}%
-	
-	\newcommand{\cvssScorepretty}[1]{%
-		\def\CVSScategory{\category{\cvssScore{#1}}}%
-		\textcolor{color@cvss@\CVSScategory}{\cvssScore{#1}}%
-	}%
-
 %    \end{macrocode}
+%\end{macro}
 %
+% \subsubsection{Impact}
+% The calculations for the impact depends whether the scope is changed or not, and will be computed differently:
+%     \begin{equation}
+%     \text{Impact} \rightarrow  
+%     \begin{cases} 
+%          \text{Scope Unchanged}  & 6.42 \times ISS\\
+%          \text{Scope Changed}  & 7.52 \times (ISS - 0.029) - 3.25 \times (ISS - 0.02)^{15}\\
+%     \end{cases}
+%     \end{equation}
 %
-%\StopEventually{
-%  \PrintChanges
-%  \PrintIndex
-%}
+% This gives the following implementation:
 %
-
+%\begin{macro}{\__CVSS_calcImpact}
+%    \begin{macrocode}
+\cs_new:Npn \__CVSS_calcImpact:nn #1#2
+{
+     % #1 = Scope
+     % #2 = ISS
+     % Scope Unchanged 6.42 × ISS
+     % Scope Changed 7.52 × [ISS-0.029] - 3.25 × [ISS-0.02]15
+     \str_case_e:nnF {#1}
+     {
+          { U } { \fp_eval:n { 6.42 * (#2) } } % Scope UNCHANGED
+          { C } { \fp_eval:n { 7.52 * ( (#2) - 0.029 ) - 3.25 * ( (#2) - 0.02 )^15 } } % Scope CHANGED
+     }
+     { \msg_error:nnxxx { CVSS } { invalid-option } { calcISC } {#1} {\msg_line_context:} }
+}%
+%    \end{macrocode}
+%\end{macro}
 %
-%\begin{macro}{\examplemacro}
-%\changes{v1.0}{2022/11/03}{First public release}
+% \subsubsection{Exploitability}
+% The equation to compute the exploitability is the following:
+%     \begin{equation}
+%          8.22 \times \text{AttackVector} \times \text{AttackComplexity} \times \text{PrivilegesRequired} \times \text{UserInteraction}
+%     \end{equation}
+%
+% This gives the following implementation:
+%
+%\begin{macro}{\__CVSS_calcExploitability}
+%    \begin{macrocode}
+\cs_new:Npn \__CVSS_calcExploitability:nnnnn #1#2#3#4#5
+{
+     % #1 Attack Vector
+     % #2 Attack Complexity
+     % #3 Privileges Required
+     % #4 User Interaction
+     % #5 Scope
+     % 8.22 × AttackVector × AttackComplexity × PrivilegeRequired × UserInteraction
+     8.22 * (\__CVSS_parseAV:n {#1}) * (\__CVSS_parseAC:n {#2}) * (\__CVSS_parsePR:nn {#3}{#5}) * (\__CVSS_parseUI:n {#4})%
+}
+%    \end{macrocode}
+%\end{macro}
+%
+% \subsubsection{CVSS Base Score}
+% Now that all the pre-requisites are calculated, we can compute the CVSS base score as follows:
+%     \begin{equation}
+%     \text{Base Score} =
+%     \begin{cases}
+%          0 & \text{if Impact $\geq 0$ } \\
+%          Roundup \Bigr( min \bigr[(\text{Impact} + \text{Exploitability}), 10\bigr]\Bigr) & \text{if Scope is Unchanged} \\
+%          Roundup \Bigr(min \bigr[1.08 \times (\text{Impact} + \text{Exploitability}), 10\bigr]\Bigr) & \text{if Scope is changed}
+%     \end{cases}
+%\end{equation}
+%
+% This gives the following implementation:
+%
+%\begin{macro}{\__CVSS_cvssBaseScore}
+%    \begin{macrocode}
+\cs_new:Npn \__CVSS_cvssBaseScore:nnnnnnnn #1#2#3#4#5#6#7#8 {
+     % #1 Attack Vector %Network N, Adjacent A, Local L, Physical P
+     % #2 Attack Complexity %Low L, High H
+     % #3 Privileges Required %None N, Low L, High H
+     % #4 User Interaction %None N, Required R
+     % #5 Scope %Unchanged U, Changed C
+     % #6 Confidentiality Impact %High H, Low L, None N
+     % #7 Integrity Impact %High H, Low L, None N
+     % #8 Availability Impact %High H, Low L, None N
+     %
+     \fp_compare:nTF { \exp_args:Ne \__CVSS_calcImpact:nn {#5}{\exp_args:Ne \__CVSS_calcISS:nnn {#6}{#7}{#8}} <= 0 }
+     % IF ISC <=0
+     {
+          % ISC <=0
+          0.0
+     }{
+          % ISC > 0
+          \str_case_e:nnF {#5}
+          {
+               { U } { % SCOPE UNCHANGED
+                    \fp_eval:n { \__CVSS_roundup:n { min( ((\__CVSS_calcImpact:nn {#5}{\__CVSS_calcISS:nnn {#6}{#7}{#8}}) + (\__CVSS_calcExploitability:nnnnn {#1}{#2}{#3}{#4}{#5})), 10) } }%
+               }
+               { C } { % SCOPE CHANGED
+                    \fp_eval:n { \__CVSS_roundup:n { min( (1.08 * ((\__CVSS_calcImpact:nn {#5}{\__CVSS_calcISS:nnn {#6}{#7}{#8}}) + (\__CVSS_calcExploitability:nnnnn {#1}{#2}{#3}{#4}{#5}))), 10) } }%
+               }
+          }
+          { \msg_error:nnxxx { CVSS } { invalid-option } { parseScope } {#1} {\msg_line_context:} }
+     }%
+}
+%    \end{macrocode}
+%\end{macro}
+%
+% \subsubsection{CVSS Base Score}
+% Now we can use a macro to check the validity of the CVSS string and \textbf{finally} call \texttt{\textbackslash{}__CVSS_cvssBaseScore} internally. 
+% This is the most important macro of this whole package, and is expandable.
+%
+%\begin{macro}{\cvssScore}
+%    \begin{macrocode}
+\NewExpandableDocumentCommand \cvssScore { m }{%
+     
+     % Check that there are 35 chars
+     \int_compare:nNnTF { \str_count_ignore_spaces:n {#1} } = {35}{}{
+          \msg_error:nnxx{CVSS}{invalid-length}{#1}{\msg_line_context:}
+     }
+     % Check AV value
+     \str_if_eq:eeTF {\str_range:nnn {#1} {1} {3}} {AV:} 
+     {} {
+          \msg_error:nnxxx{CVSS}{invalid-structure}{AV}{\str_range:nnn {#1} {1} {3}}{\msg_line_context:}
+     }
+     
+     % Check AC value
+     \str_if_eq:eeTF {\str_range:nnn {#1} {5} {8}} {/AC:} 
+     {} {
+          \msg_error:nnxxx{CVSS}{invalid-structure}{AC}{\str_range:nnn {#1} {5} {8}}{\msg_line_context:}
+     }
+     
+     
+     % Check PR value
+     \str_if_eq:eeTF {\str_range:nnn {#1} {10} {13}} {/PR:} 
+     {} {
+          \msg_error:nnxxx{CVSS}{invalid-structure}{PR}{\str_range:nnn {#1} {10} {13}}{\msg_line_context:}
+     }
+     
+     % Check UI value
+     \str_if_eq:eeTF {\str_range:nnn {#1} {15} {18}} {/UI:} 
+     {} {
+          \msg_error:nnxxx{CVSS}{invalid-structure}{UI}{\str_range:nnn {#1} {15} {18}}{\msg_line_context:}
+     }
+     
+     % Check S value
+     \str_if_eq:eeTF {\str_range:nnn {#1} {20} {22}} {/S:} 
+     {} {
+          \msg_error:nnxxx{CVSS}{invalid-structure}{S}{\str_range:nnn {#1} {20} {22}}{\msg_line_context:}
+     }
+     
+     % Check I value
+     \str_if_eq:eeTF {\str_range:nnn {#1} {24} {26}} {/C:} 
+     {} {
+          \msg_error:nnxxx{CVSS}{invalid-structure}{C}{\str_range:nnn {#1} {24} {26}}{\msg_line_context:}
+     }
+     
+     % Check I value
+     \str_if_eq:eeTF {\str_range:nnn {#1} {28} {30}} {/I:} 
+     {} {
+          \msg_error:nnxxx{CVSS}{invalid-structure}{I}{\str_range:nnn {#1} {28} {30}}{\msg_line_context:}
+     }
+     
+     % Check A value
+     \str_if_eq:eeTF {\str_range:nnn {#1} {32} {34}} {/A:} 
+     {} {
+          \msg_error:nnxxx{CVSS}{invalid-structure}{A}{\str_range:nnn {#1} {32} {34}}{\msg_line_context:}
+     }
+     
+     \exp_args:Ne \__CVSS_cvssBaseScore:nnnnnnnn
+     { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 4 } }
+     { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 9 } }
+     { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 14 } }
+     { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 19 } }
+     { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 23 } }
+     { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 27 } }
+     { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 31 } }
+     { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 35 } }
+     
+}%
+\ExplSyntaxOff
+%    \end{macrocode}
+%\end{macro}
+%
+% \subsection{CVSS levels}
+% Since we can compute the numerical score of a given CVSS string, we can now get the classification of a CVSS vector using the 
+% FIRST terminology :
+%\begin{table}[!ht]
+%     \centering
+%     \begin{tabular}{cc}
+%          \hline
+%          \textbf{Rating} & \textbf{CVSS Score} \\ \hline
+%          None & $0.0$ \\ 
+%          Low & $0.1 - 3.9$ \\
+%          Medium & $4.0 - 6.9$ \\ 
+%          High & $7.0 - 8.9$ \\
+%          Critical & $9.0 - 10.0$ \\ \hline
+%     \end{tabular}
+%\end{table}
+%
+% Then we can build our switch case to assign a level to the numerical CVSS score
+%\begin{macro}{\category}
+% This macro will output a CVSS level based on the numerical CVSS score.
 %    \begin{macrocode}
 \ExplSyntaxOn
 \NewExpandableDocumentCommand \category { m }{%
-	%\newcommand{\category}[1]{
-		\fp_compare:nNnTF {#1}<{\scoreLow}{None}
-		{
-			\fp_compare:nNnTF{#1}<{\scoreMed}{Low}
-			{
-				\fp_compare:nNnTF{#1}<{\scoreHigh}{Medium}
-				{
-					\fp_compare:nNnTF{#1}<{\scoreCrit}{High}
-					{Critical}
-				}%
-			}%
-		}%
-	}%
+     \fp_compare:nNnTF {#1}<{\scoreLow}{None}
+     {
+          \fp_compare:nNnTF{#1}<{\scoreMed}{Low}
+          {
+               \fp_compare:nNnTF{#1}<{\scoreHigh}{Medium}
+               {
+                    \fp_compare:nNnTF{#1}<{\scoreCrit}{High}
+                    {Critical}
+               }%
+          }%
+     }%
+}%
 \ExplSyntaxOff
+%    \end{macrocode}
+% We can even have a colored version of the score.
+%\begin{macro}{\cvssScorepretty}
+% This macro will output the \textbf{colored} CVSS level based on the CVSS vector.
+%    \begin{macrocode}
+\newcommand{\cvssScorepretty}[1]{%
+     \def\CVSScategory{\category{\cvssScore{#1}}}%
+     \textcolor{color@cvss@\CVSScategory}{\cvssScore{#1}}%
+}%
+%    \end{macrocode}
+%\end{macro}
+%\end{macro}
+% We have also built a macro that will output the CVSS level based on the CVSS string, that combines \texttt{\textbackslash{}cvssScore} and \texttt{\textbackslash{}category}:
+%\begin{macro}{\cvssLevel}
+% This macro will output a CVSS level based on the numerical CVSS score.
+%    \begin{macrocode}
+\newcommand{\cvssLevel}[1]{%
+     \def\CVSSscore{\cvssScore{#1}}%
+     \category{\CVSSscore}%
+}%
+%    \end{macrocode}
+%\end{macro}
+% And we can even have a colored version of this level.
+%\begin{macro}{\cvssLevelpretty}
+% This macro will output the \textbf{colored} CVSS level based on the numerical CVSS score.
+%    \begin{macrocode}
+\newcommand{\cvssLevelpretty}[1]{%
+     \def\CVSScategory{\category{\cvssScore{#1}}}%
+     \textcolor{color@cvss@\CVSScategory}{\CVSScategory}%
+}%
+%    \end{macrocode}
+%\end{macro}
+% \subsection{Fancy prints}
+% \subsubsection{Framed CVSS Level}
+% For nice display of the CVSS score we created also tags, that can be used to highlight the CVSS score.
+%\begin{macro}{\cvssFrame}
+% First, we define \texttt{cvssFrame}, a type of \texttt{tcolorbox} we are going to use:
+%    \begin{macrocode}
+\DeclareTotalTCBox{\cvssFrame}{m}{
+     enhanced,nobeforeafter,
+     tcbox raise base,
+     boxrule=0.4pt,
+     top=0mm,bottom=0mm,right=1mm,left=1mm,
+     arc=1pt,
+     boxsep=2pt,
+     colframe=color@cvss@#1,
+     colback=tcbcolframe,
+     coltext=black,
+}{#1}%
+
+\MakeRobust\cvssFrame
 %    \end{macrocode}
 %\end{macro}
 %
-%</package>
+% Then we can call this box in conjunction with \texttt{cvssScore}.
+%\begin{macro}{\cvssTag}
+% This macro will output the \textbf{colored} CVSS level based on the numerical CVSS score.
+%    \begin{macrocode}
+\newcommand{\cvssTag}[1]{%
+     \def\CVSSscore{\cvssScore{#1}}%
+     \cvssFrame{\category{\CVSSscore}}%
+}%
+%    \end{macrocode}
+%\end{macro}
+%
+% \subsubsection{Full CVSS display}
+% We can even have a nice all-in display of the category, the scrore and a hyperlink to the FIRST calculator using a combination of all the functions we've defined:
+%\begin{macro}{\cvssPrint}
+% This macro will output the \textbf{colored} CVSS level based on the numerical CVSS score.
+%    \begin{macrocode}     
+\newcommand{\cvssPrint}[1]{%
+     \def\CVSSscore{\cvssScore{#1}}
+     \cvssFrame{\category{\CVSSscore}} \quad \CVSSscore \quad%
+     \href{https://www.first.org/cvss/calculator/3.1\#CVSS:3.1/#1}{CVSS:3.1/#1}
+}%
+%    \end{macrocode}
+%\end{macro}
+
 % \end{implementation}
 % \Finale
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \endinput
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
