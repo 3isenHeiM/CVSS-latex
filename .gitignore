@@ -9,8 +9,11 @@
 *.fmt
 *.fot
 *.cb
+*.hd
+*.sty
 *.cb2
 .*.lb
+.*.ins
 
 ## Intermediate documents:
 *.dvi
