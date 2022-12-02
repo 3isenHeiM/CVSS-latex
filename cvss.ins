@@ -49,67 +49,28 @@ and the derived files           cvss.ins,
   \file{\jobname.sty}{\from{\jobname.dtx}{package}}
 }
 \endbatchfile
-     %   \begin{syntax}
-          %     \cs{cvssScore} \Arg{CVSS string}
-          %   \end{syntax}
-     %   \begin{syntax}
-          %     \cs{cvssScorepretty} \Arg{CVSS string}
-          %   \end{syntax}
-     % This macro will print a \textbf{colored} base CVSS 3.1 score of an \marg{input vector} (without \texttt{CVSS3.1/}). The output of this macro is a floating point CVSS score.
-     % \end{function}
-     %   \begin{syntax}
-     %     \cs{cvssLevel} \Arg{CVSS string}
-     %   \end{syntax}
-     %   \begin{syntax}
-     %     \cs{cvssLevelpretty} \Arg{CVSS string}
-     %   \end{syntax}
-     %   \begin{syntax}
-     %     \cs{cvssTag} \Arg{CVSS string}
-     %   \end{syntax}
-     %   \begin{syntax}
-          %     \cs{cvssPrint} \Arg{CVSS string}
-          %   \end{syntax}
-     % This macro will print all details of a CVSS string: colored level, score, and hyperlink to FIRST calculator, from an \marg{input vector} (without \texttt{CVSS3.1/}).
-     % \end{function}
-     %   \begin{syntax}
-     %     \cs{category} \Arg{CVSS score}
-     %   \end{syntax}
-     %   \begin{syntax}
-          %     \cs{cvssFrame} \Arg{CVSS score}
-          %   \end{syntax}
-     % This macro will output a CVSS tag based on a CVSS \textbf{level} passed as argument. The mandatory argument must be one of the defined CVSS levels (None, Info, Low, Medium, High or Critical), for example \texttt{Info}.
-     % \end{function}
+ %   \begin{syntax}
+ % \end{function}
+ %   \begin{syntax}
+ %     \cs{cvssLevel} \Arg{CVSS string}
+ %   \end{syntax}
+ %   \begin{syntax}
+ %     \cs{cvssLevelpretty} \Arg{CVSS string}
+ %   \end{syntax}
+ %   \begin{syntax}
+ %     \cs{cvssTag} \Arg{CVSS string}
+ %   \end{syntax}
+ %   \begin{syntax}
+ %     \cs{category} \Arg{CVSS score}
+ %   \end{syntax}
 
 
-     % \begin{verbatim}
-     % \end{verbatim}
-     %\end{minipage}%
-     %\end{minipage}
-
-     % \begin{verbatim}
-     % \end{verbatim}
-     %\end{minipage}%
-     %\end{minipage}
-
-     % \begin{verbatim}
-     % \end{verbatim}
-     %\end{minipage}%
-     %\end{minipage}
-
-     % \begin{verbatim}
-     % \end{verbatim}
-     %\end{minipage}%
-     %\end{minipage}
 
 
-     % \begin{verbatim}
-     %\cvssFrame{Low}
-     % \end{verbatim}
-     %\end{minipage}%
-     %\cvssFrame{Low}
 
-     %\category{9.9}
-     %\category{9.9}
+
+
+%%\category{9.9}
 \RequirePackage{expl3}
 \RequirePackage[skins]{tcolorbox}
 \tcbuselibrary{xparse}
@@ -132,6 +93,7 @@ and the derived files           cvss.ins,
 \msg_new:nnn { CVSS } { invalid-option }{ Value~'#2'~invalid~for~#1~#3.}
 \msg_new:nnn { CVSS } { invalid-structure } { CVSS~metric~#1~is~not~correct~(#2)~#3.}
 \msg_new:nnn { CVSS } { invalid-length } { CVSS~vector~"#1"~is~badly~formatted~#2.}
+\msg_new:nnn { CVSS } { wrong-version } { Wrong~CVSS~version~(#2)~#3.}
 \cs_new:Npn \__CVSS_parseAV:n #1
 {
      \str_case_e:nnF {#1}
@@ -265,69 +227,81 @@ and the derived files           cvss.ins,
      }%
 }
 \NewExpandableDocumentCommand \cvssScore { m }{%
+    % Check that there are 44 chars
+    \int_compare:nNnTF { \str_count_ignore_spaces:n {#1} } = {44}{}{
+        \msg_error:nnxx{CVSS}{invalid-length}{#1}{\msg_line_context:}
+    }
+    % Check CVSS: value
+    \str_if_eq:eeTF {\str_range:nnn {#1} {1} {5}} {CVSS:}
+    {} {
+        \msg_error:nnxxx{CVSS}{invalid-structure}{AV}{\str_range:nnn {#1} {1} {5}}{\msg_line_context:}
+    }
+    % Check 3.1 value
+    \str_if_eq:eeTF {\str_range:nnn {#1} {6} {8}} {3.1}
+    {} {
+        \msg_error:nnxxx{CVSS}{wrong-version}{3.1}{\str_range:nnn {#1} {6} {8}}{\msg_line_context:}
+    }
+    % Check 3.1 value
+    \str_if_eq:eeTF {\str_range:nnn {#1} {9} {9}} {/}
+    {} {
+        \msg_error:nnxxx{CVSS}{wrong-version}{/}{\str_range:nnn {#1} {9} {9}}{\msg_line_context:}
+    }
+    % Check AV value
+    \str_if_eq:eeTF {\str_range:nnn {#1} {10} {12}} {AV:}
+    {} {
+        \msg_error:nnxxx{CVSS}{invalid-structure}{AV}{\str_range:nnn {#1} {10} {12}}{\msg_line_context:}
+    }
+    % Check AC value
+    \str_if_eq:eeTF {\str_range:nnn {#1} {14} {17}} {/AC:}
+    {} {
+        \msg_error:nnxxx{CVSS}{invalid-structure}{AC}{\str_range:nnn {#1} {14} {17}}{\msg_line_context:}
+    }
 
-     % Check that there are 35 chars
-     \int_compare:nNnTF { \str_count_ignore_spaces:n {#1} } = {35}{}{
-          \msg_error:nnxx{CVSS}{invalid-length}{#1}{\msg_line_context:}
-     }
-     % Check AV value
-     \str_if_eq:eeTF {\str_range:nnn {#1} {1} {3}} {AV:}
-     {} {
-          \msg_error:nnxxx{CVSS}{invalid-structure}{AV}{\str_range:nnn {#1} {1} {3}}{\msg_line_context:}
-     }
+    % Check PR value
+    \str_if_eq:eeTF {\str_range:nnn {#1} {19} {22}} {/PR:}
+    {} {
+        \msg_error:nnxxx{CVSS}{invalid-structure}{PR}{\str_range:nnn {#1} {19} {22}}{\msg_line_context:}
+    }
 
-     % Check AC value
-     \str_if_eq:eeTF {\str_range:nnn {#1} {5} {8}} {/AC:}
-     {} {
-          \msg_error:nnxxx{CVSS}{invalid-structure}{AC}{\str_range:nnn {#1} {5} {8}}{\msg_line_context:}
-     }
+    % Check UI value
+    \str_if_eq:eeTF {\str_range:nnn {#1} {24} {27}} {/UI:}
+    {} {
+        \msg_error:nnxxx{CVSS}{invalid-structure}{UI}{\str_range:nnn {#1} {24} {27}}{\msg_line_context:}
+    }
 
-     % Check PR value
-     \str_if_eq:eeTF {\str_range:nnn {#1} {10} {13}} {/PR:}
-     {} {
-          \msg_error:nnxxx{CVSS}{invalid-structure}{PR}{\str_range:nnn {#1} {10} {13}}{\msg_line_context:}
-     }
+    % Check S value
+    \str_if_eq:eeTF {\str_range:nnn {#1} {29} {31}} {/S:}
+    {} {
+        \msg_error:nnxxx{CVSS}{invalid-structure}{S}{\str_range:nnn {#1} {29} {31}}{\msg_line_context:}
+    }
 
-     % Check UI value
-     \str_if_eq:eeTF {\str_range:nnn {#1} {15} {18}} {/UI:}
-     {} {
-          \msg_error:nnxxx{CVSS}{invalid-structure}{UI}{\str_range:nnn {#1} {15} {18}}{\msg_line_context:}
-     }
+    % Check I value
+    \str_if_eq:eeTF {\str_range:nnn {#1} {33} {35}} {/C:}
+    {} {
+        \msg_error:nnxxx{CVSS}{invalid-structure}{C}{\str_range:nnn {#1} {33} {35}}{\msg_line_context:}
+    }
 
-     % Check S value
-     \str_if_eq:eeTF {\str_range:nnn {#1} {20} {22}} {/S:}
-     {} {
-          \msg_error:nnxxx{CVSS}{invalid-structure}{S}{\str_range:nnn {#1} {20} {22}}{\msg_line_context:}
-     }
+    % Check I value
+    \str_if_eq:eeTF {\str_range:nnn {#1} {37} {39}} {/I:}
+    {} {
+        \msg_error:nnxxx{CVSS}{invalid-structure}{I}{\str_range:nnn {#1} {37} {39}}{\msg_line_context:}
+    }
 
-     % Check I value
-     \str_if_eq:eeTF {\str_range:nnn {#1} {24} {26}} {/C:}
-     {} {
-          \msg_error:nnxxx{CVSS}{invalid-structure}{C}{\str_range:nnn {#1} {24} {26}}{\msg_line_context:}
-     }
+    % Check A value
+    \str_if_eq:eeTF {\str_range:nnn {#1} {41} {43}} {/A:}
+    {} {
+        \msg_error:nnxxx{CVSS}{invalid-structure}{A}{\str_range:nnn {#1} {41} {43}}{\msg_line_context:}
+    }
 
-     % Check I value
-     \str_if_eq:eeTF {\str_range:nnn {#1} {28} {30}} {/I:}
-     {} {
-          \msg_error:nnxxx{CVSS}{invalid-structure}{I}{\str_range:nnn {#1} {28} {30}}{\msg_line_context:}
-     }
-
-     % Check A value
-     \str_if_eq:eeTF {\str_range:nnn {#1} {32} {34}} {/A:}
-     {} {
-          \msg_error:nnxxx{CVSS}{invalid-structure}{A}{\str_range:nnn {#1} {32} {34}}{\msg_line_context:}
-     }
-
-     \exp_args:Ne \__CVSS_cvssBaseScore:nnnnnnnn
-     { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 4 } }
-     { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 9 } }
-     { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 14 } }
-     { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 19 } }
-     { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 23 } }
-     { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 27 } }
-     { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 31 } }
-     { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 35 } }
-
+    \exp_args:Ne \__CVSS_cvssBaseScore:nnnnnnnn
+    { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 13 } }
+    { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 18 } }
+    { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 23 } }
+    { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 28 } }
+    { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 32 } }
+    { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 36 } }
+    { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 40 } }
+    { \str_use:N \str_item_ignore_spaces:nn { #1 }{ 44 } }
 }%
 \ExplSyntaxOff
 \ExplSyntaxOn
@@ -377,7 +351,7 @@ and the derived files           cvss.ins,
 \newcommand{\cvssPrint}[1]{%
      \def\CVSSscore{\cvssScore{#1}}
      \cvssFrame{\category{\CVSSscore}} \quad \CVSSscore \quad%
-     \href{https://www.first.org/cvss/calculator/3.1\#CVSS:3.1/#1}{CVSS:3.1/#1}
+     \href{https://www.first.org/cvss/calculator/3.1\##1}{#1}
 }%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
